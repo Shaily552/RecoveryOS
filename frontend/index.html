@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>RecoveryOS — Payment Recovery Intelligence</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- NAVBAR -->
+
+    <nav class="navbar">
+
+        <div class="brand">
+            <div class="brand-mark">R</div>
+
+            <div>
+                <div class="brand-name">RecoveryOS</div>
+                <div class="brand-subtitle">Payment Recovery Intelligence</div>
+            </div>
+        </div>
+
+        <div class="nav-right">
+
+            <div class="nav-status">
+                <span class="status-dot"></span>
+                API Connected
+            </div>
+
+            <span class="nav-label">Decision Engine</span>
+
+        </div>
+
+    </nav>
+
+
+    <main class="container">
+
+
+        <!-- HERO -->
+
+        <section class="hero">
+
+            <div class="hero-content">
+
+                <div class="eyebrow">
+                    AI-POWERED PAYMENT RECOVERY
+                </div>
+
+                <h1>
+                    Recover more revenue.<br>
+                    <span>Make smarter decisions.</span>
+                </h1>
+
+                <p>
+                    RecoveryOS evaluates every failed payment against
+                    multiple recovery strategies and selects the action
+                    with the highest expected incremental value.
+                </p>
+
+                <div class="hero-pills">
+
+                    <div class="hero-pill">
+                        <span>●</span>
+                        Uplift Modeling
+                    </div>
+
+                    <div class="hero-pill">
+                        <span>●</span>
+                        Guardrails
+                    </div>
+
+                    <div class="hero-pill">
+                        <span>●</span>
+                        Policy Intelligence
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <div class="hero-stat">
+
+                <div class="hero-stat-label">
+                    OFFLINE EVALUATION
+                </div>
+
+                <div class="hero-stat-value">
+                    ₹14.90M
+                </div>
+
+                <div class="hero-stat-description">
+                    Expected value under the RecoveryOS policy
+                </div>
+
+                <div class="hero-stat-improvement">
+                    ↑ ₹4.49M vs historical policy
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- ANALYSIS CARD -->
+
+        <section class="analysis-card">
+
+            <div class="section-heading">
+
+                <div>
+
+                    <div class="section-eyebrow">
+                        RECOVERY ANALYSIS
+                    </div>
+
+                    <h2>Payment Event</h2>
+
+                    <p>
+                        Provide the payment context and let RecoveryOS
+                        determine the highest-value recovery strategy.
+                    </p>
+
+                </div>
+
+                <div class="analysis-badge">
+                    ML Decision Engine
+                </div>
+
+            </div>
+
+
+            <form id="recoveryForm">
+
+
+                <!-- CUSTOMER -->
+
+                <div class="form-section">
+
+                    <div class="form-section-title">
+                        Customer Profile
+                    </div>
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label for="customer_age">
+                                Customer Age
+                            </label>
+
+                            <input
+                                id="customer_age"
+                                type="number"
+                                value="25"
+                                min="1"
+                            >
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="customer_tenure_days">
+                                Customer Tenure
+                                <span>days</span>
+                            </label>
+
+                            <input
+                                id="customer_tenure_days"
+                                type="number"
+                                value="300"
+                                min="0"
+                            >
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="previous_transactions">
+                                Previous Transactions
+                            </label>
+
+                            <input
+                                id="previous_transactions"
+                                type="number"
+                                value="20"
+                                min="0"
+                            >
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="previous_success_rate">
+                                Previous Success Rate
+                            </label>
+
+                            <input
+                                id="previous_success_rate"
+                                type="number"
+                                value="0.8"
+                                min="0"
+                                max="1"
+                                step="0.01"
+                            >
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="previous_failures">
+                                Previous Failures
+                            </label>
+
+                            <input
+                                id="previous_failures"
+                                type="number"
+                                value="3"
+                                min="0"
+                            >
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="is_repeat_customer">
+                                Repeat Customer
+                            </label>
+
+                            <select id="is_repeat_customer">
+
+                                <option value="1" selected>
+                                    Yes
+                                </option>
+
+                                <option value="0">
+                                    No
+                                </option>
+
+                            </select>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- PAYMENT -->
+
+                <div class="form-section">
+
+                    <div class="form-section-title">
+                        Payment Context
+                    </div>
+
+                    <div class="form-grid">
+
+
+                        <div class="form-group">
+                            <label for="amount">
+                                Transaction Amount
+                            </label>
+
+                            <div class="input-prefix">
+                                <span>₹</span>
+
+                                <input
+                                    id="amount"
+                                    type="number"
+                                    value="1000"
+                                    min="1"
+                                    step="0.01"
+                                >
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="event_type">
+                                Event Type
+                            </label>
+
+                            <select id="event_type">
+
+                                <option value="payment_failure" selected>
+                                    Payment Failure
+                                </option>
+
+                                <option value="subscription_failure">
+                                    Subscription Failure
+                                </option>
+
+                                <option value="overdue_invoice">
+                                    Overdue Invoice
+                                </option>
+
+                            </select>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="payment_method">
+                                Payment Method
+                            </label>
+
+                            <select id="payment_method">
+
+                                <option value="card" selected>
+                                    Card
+                                </option>
+
+                                <option value="upi">
+                                    UPI
+                                </option>
+
+                                <option value="netbanking">
+                                    Net Banking
+                                </option>
+
+                                <option value="wallet">
+                                    Wallet
+                                </option>
+
+                            </select>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="failure_reason">
+                                Failure Reason
+                            </label>
+
+                            <select id="failure_reason">
+
+                                <option value="insufficient_funds">
+                                    Insufficient Funds
+                                </option>
+
+                                <option value="authentication_failure" selected>
+                                    Authentication Failure
+                                </option>
+
+                                <option value="technical_failure">
+                                    Technical Failure
+                                </option>
+
+                                <option value="network_failure">
+                                    Network Failure
+                                </option>
+
+                                <option value="card_expired">
+                                    Card Expired
+                                </option>
+
+                            </select>
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="attempts">
+                                Payment Attempts
+                            </label>
+
+                            <input
+                                id="attempts"
+                                type="number"
+                                value="1"
+                                min="0"
+                            >
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="hours_since_event">
+                                Hours Since Event
+                            </label>
+
+                            <input
+                                id="hours_since_event"
+                                type="number"
+                                value="2"
+                                min="0"
+                                step="0.1"
+                            >
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- BEHAVIOUR -->
+
+                <div class="form-section">
+
+                    <div class="form-section-title">
+                        Customer Behaviour
+                    </div>
+
+                    <div class="form-grid">
+
+
+                        <div class="form-group">
+                            <label for="checkout_intent">
+                                Checkout Intent
+                            </label>
+
+                            <input
+                                id="checkout_intent"
+                                type="number"
+                                value="0.8"
+                                min="0"
+                                max="1"
+                                step="0.01"
+                            >
+                        </div>
+
+
+                        <div class="form-group">
+                            <label for="engagement_score">
+                                Engagement Score
+                            </label>
+
+                            <input
+                                id="engagement_score"
+                                type="number"
+                                value="0.7"
+                                min="0"
+                                max="1"
+                                step="0.01"
+                            >
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+                <!-- CTA -->
+
+                <button
+                    type="submit"
+                    class="analyze-button"
+                >
+
+                    <span>
+                        Analyze Recovery Opportunity
+                    </span>
+
+                    <span class="button-arrow">
+                        →
+                    </span>
+
+                </button>
+
+                <div class="form-note">
+                    RecoveryOS evaluates 5 possible recovery strategies
+                    before making a recommendation.
+                </div>
+
+            </form>
+
+        </section>
+
+
+        <!-- RESULTS -->
+
+        <section id="results" class="results hidden">
+
+
+            <!-- RECOMMENDATION -->
+
+            <div class="recommendation-card">
+
+                <div>
+
+                    <div class="result-eyebrow">
+                        RECOMMENDED RECOVERY ACTION
+                    </div>
+
+                    <h2 id="recommendedAction">
+                        —
+                    </h2>
+
+                    <div
+                        id="guardrailReason"
+                        class="recommendation-status"
+                    >
+                        —
+                    </div>
+
+                </div>
+
+
+                <div class="recommendation-value">
+
+                    <div>
+                        Net Value
+                    </div>
+
+                    <strong id="netValue">
+                        ₹0.00
+                    </strong>
+
+                </div>
+
+            </div>
+
+
+            <!-- METRICS -->
+
+            <div class="metrics-grid">
+
+                <div class="metric-card">
+                    <div class="metric-label">
+                        Predicted Recovery
+                    </div>
+
+                    <div
+                        id="predictedRecovery"
+                        class="metric-value"
+                    >
+                        ₹0.00
+                    </div>
+                </div>
+
+
+                <div class="metric-card">
+                    <div class="metric-label">
+                        Baseline Recovery
+                    </div>
+
+                    <div
+                        id="baselineRecovery"
+                        class="metric-value"
+                    >
+                        ₹0.00
+                    </div>
+                </div>
+
+
+                <div class="metric-card highlight">
+                    <div class="metric-label">
+                        Incremental Uplift
+                    </div>
+
+                    <div
+                        id="uplift"
+                        class="metric-value"
+                    >
+                        ₹0.00
+                    </div>
+                </div>
+
+
+                <div class="metric-card">
+                    <div class="metric-label">
+                        Action Cost
+                    </div>
+
+                    <div
+                        id="actionCost"
+                        class="metric-value"
+                    >
+                        ₹0.00
+                    </div>
+                </div>
+
+            </div>
+
+
+            <!-- STRATEGY COMPARISON -->
+
+            <div class="result-card">
+
+                <div class="result-card-header">
+
+                    <div>
+
+                        <div class="result-eyebrow">
+                            DECISION ANALYSIS
+                        </div>
+
+                        <h3>
+                            Recovery Strategy Comparison
+                        </h3>
+
+                        <p>
+                            Expected incremental value across
+                            available recovery actions.
+                        </p>
+
+                    </div>
+
+                </div>
+
+
+                <div id="actionComparison"></div>
+
+            </div>
+
+
+            <!-- EXPLANATION -->
+
+            <div class="result-card">
+
+                <div class="result-eyebrow">
+                    DECISION INTELLIGENCE
+                </div>
+
+                <h3>
+                    AI Decision Explanation
+                </h3>
+
+                <div
+                    id="explanation"
+                    class="explanation-box"
+                >
+                    —
+                </div>
+
+            </div>
+<!-- GUARDRAILS & ESCALATION -->
+
+<div class="guardrail-card">
+
+    <div>
+
+        <div class="result-eyebrow">
+            SAFETY & BUSINESS CONTROLS
+        </div>
+
+        <h3>
+            Guardrail Check
+        </h3>
+
+        <p>
+            The ML recommendation is validated against
+            business safety rules before execution.
+        </p>
+
+        <div
+            id="escalationPanel"
+            class="escalation-panel no-escalation"
+        >
+
+            <div class="escalation-label">
+                ESCALATION STATUS
+            </div>
+
+            <div
+                id="escalationStatus"
+                class="escalation-status"
+            >
+                No Escalation Required
+            </div>
+
+            <div
+                id="escalationReason"
+                class="escalation-reason"
+            >
+                No escalation required
+            </div>
+
+        </div>
+
+    </div>
+
+    <div
+        id="guardrailStatus"
+        class="guardrail-badge"
+    >
+        Approved
+    </div>
+
+</div>
+
+<!-- AUDIT TRAIL -->
+
+<div class="result-card">
+
+    <div class="result-eyebrow">
+        DECISION TRACEABILITY
+    </div>
+
+    <h3>
+        Decision Audit Trail
+    </h3>
+
+    <p>
+        RecoveryOS records each decision for traceability and review.
+    </p>
+
+    <div class="audit-grid">
+
+    <div class="audit-item">
+        <span>Timestamp</span>
+        <strong id="auditTimestamp">—</strong>
+    </div>
+
+    <div class="audit-item">
+        <span>ML Recommendation</span>
+        <strong id="auditMLAction">—</strong>
+    </div>
+
+    <div class="audit-item">
+        <span>Final Action</span>
+        <strong id="auditFinalAction">—</strong>
+    </div>
+
+    <div class="audit-item">
+        <span>Escalation</span>
+        <strong id="auditEscalation">—</strong>
+    </div>
+
+    <div class="audit-item">
+        <span>Guardrail Decision</span>
+        <strong id="auditGuardrail">—</strong>
+    </div>
+
+    <div class="audit-item">
+        <span>Net Value</span>
+        <strong id="auditNetValue">—</strong>
+    </div>
+
+</div>
+
+  
+
+</div>
+
+
+            <!-- POLICY -->
+
+            <div class="result-card">
+
+                <div class="result-eyebrow">
+                    POLICY INTELLIGENCE
+                </div>
+
+                <h3>
+                    Retrieved Policy Context
+                </h3>
+
+                <p>
+                    Relevant recovery guidance retrieved from the
+                    RecoveryOS knowledge base.
+                </p>
+
+                <div id="policyContext"></div>
+
+            </div>
+
+
+            <!-- OFFLINE EVALUATION -->
+
+            <div class="evaluation-card">
+
+                <div class="result-eyebrow">
+                    MODEL PERFORMANCE
+                </div>
+
+                <h3>
+                    Offline Policy Evaluation
+                </h3>
+
+                <p>
+                    Held-out evaluation on 10,000 synthetic payment events.
+                </p>
+
+
+                <div class="evaluation-grid">
+
+                    <div class="evaluation-metric">
+                        <span>
+                            Historical Policy
+                        </span>
+
+                        <strong>
+                            ₹10.41M
+                        </strong>
+                    </div>
+
+
+                    <div class="evaluation-metric">
+                        <span>
+                            RecoveryOS ML Policy
+                        </span>
+
+                        <strong>
+                            ₹14.90M
+                        </strong>
+                    </div>
+
+
+                    <div class="evaluation-metric">
+                        <span>
+                            Improvement
+                        </span>
+
+                        <strong>
+                            ₹4.49M
+                        </strong>
+                    </div>
+
+
+                    <div class="evaluation-metric">
+                        <span>
+                            Oracle Coverage
+                        </span>
+
+                        <strong>
+                            94.6%
+                        </strong>
+                    </div>
+
+                </div>
+
+
+                <div class="evaluation-note">
+                    Evaluation uses held-out data. The oracle represents
+                    the maximum achievable value using known synthetic
+                    counterfactual outcomes.
+                </div>
+
+            </div>
+
+
+        </section>
+
+
+        <!-- FOOTER -->
+
+        <footer>
+
+            <div>
+                RecoveryOS · Payment Recovery Intelligence
+            </div>
+
+            <div>
+                ML + Uplift Modeling + Guardrails + RAG
+            </div>
+
+        </footer>
+
+    </main>
+
+
+    <script src="app.js?v=2"></script>
+
+</body>
+
+</html>
