@@ -302,5 +302,119 @@
         "## 1. Failed Payments and Webhooks\n\nWhen a payment attempt fails, Razorpay records the payment as Failed. If the `payment.failed` webhook is enabled, Razorpay sends a notification to the configured endpoint. Businesses can then analyse the failure and notify the customer.\n\nImportant implementation note:\n- Webhooks are asynchronous and near real-time.\n- Business-critical synchronous use cases may use payment APIs for polling.\n- A `payment.failed` webhook can sometimes be followed by a `payment.captured` webhook for the same transaction, including cases involving late authorisation or a customer retry.\n\nRecoveryOS implication:\n- A failed-payment event should not automatically be treated as permanently failed.\n- The decision engine should consider retry timing and subsequent payment-state events.\n\nSource:\nhttps://razorpay.com/docs/webhooks/\n\n---"
       ]
     }
+  },
+  {
+    "timestamp": "2026-09-04T16:38:29.962277+00:00",
+    "event": {
+      "customer_age": 25,
+      "customer_tenure_days": 300,
+      "previous_transactions": 20,
+      "previous_success_rate": 0.8,
+      "previous_failures": 3,
+      "amount": 5000.0,
+      "event_type": "payment_failure",
+      "payment_method": "card",
+      "failure_reason": "insufficient_funds",
+      "attempts": 0,
+      "hours_since_event": 2.0,
+      "checkout_intent": 0.8,
+      "engagement_score": 0.7,
+      "is_repeat_customer": 1
+    },
+    "ml_action": "reminder",
+    "final_action": "reminder",
+    "guardrail_reason": "Approved by guardrails",
+    "escalation_required": false,
+    "escalation_reason": "No escalation required",
+    "decision": {
+      "action": "reminder",
+      "explanation": "Reminder is recommended because customer action may be needed to complete the payment. The model estimates \u20b9653.44 incremental recovery over no action, with an estimated cost of \u20b91.00, giving \u20b9652.44 net value.",
+      "predicted_recovery": 3088.55,
+      "baseline_recovery": 2435.11,
+      "uplift": 653.44,
+      "cost": 1.0,
+      "net_value": 652.44,
+      "policy_context": [
+        "## 3. Subscription Notifications\n\nRazorpay supports Email, SMS and Webhook notifications for subscription events.\n\nCustomers may receive notifications for:\n- Payment failures\n- Required action after payment failure\n- Card changes\n- A subscription entering `halted` after retry attempts\n- Successful charges and other subscription lifecycle events\n\nRecoveryOS implication:\n- A reminder or customer-action message can be appropriate when the payment failure requires customer intervention.\n- Notification behaviour should be aligned with the current subscription state.\n\nSource:\nhttps://razorpay.com/docs/payments/subscriptions/notifications/\n\n---",
+        "## 6. RecoveryOS Decision Guidance\n\nThe following rules are RecoveryOS design rules derived from the above documentation, not official Razorpay policies:\n\n### Retry\nPrefer a retry-oriented action when:\n- The payment failure is recent.\n- Retry attempts have not been exhausted.\n- The failure is plausibly temporary.\n- The event is a subscription payment in an eligible retry state.\n\n### Payment Update\nPrefer a payment-update action when:\n- The customer likely needs to change card/payment details.\n- Repeated retry attempts have failed.\n- A subscription is in a state where customer payment-method correction is appropriate.\n\n### Reminder\nPrefer a reminder when:\n- Customer action is required.\n- A payment link or other payment-completion step needs attention.\n- The event is old enough that an immediate retry is less appropriate.\n\n### No Action\nUse no action when:\n- The expected incremental value of intervention is not positive after action cost.\n- The event is outside the useful recovery window.\n- Guardrails reject the available interventions.\n\n### Personalized Offer\nRecoveryOS treats personalized offers as an experimental business action. This is NOT an official Razorpay recovery recommendation. It should only be used when the ML model predicts sufficient incremental value and business guardrails permit it.\n\n---",
+        "## 2. Subscription Payment Failures\n\nRazorpay Subscriptions can automatically retry failed recurring payments.\n\nDocumented failure scenarios include:\n- Expired card\n- Bank-blocked card\n- Insufficient customer account balance\n- Customer-cancelled mandate\n\nFor a failed subscription payment:\n1. The Subscription moves to `pending`.\n2. Razorpay notifies the merchant through relevant webhooks.\n3. For card-based subscriptions, Razorpay automatically retries the payment on the following day.\n4. In the documented T+3 retry model, retries occur on T+1, T+2 and T+3.\n5. If retries are exhausted, the Subscription moves to `halted`.\n\nWhen a customer changes the card while the subscription is in an applicable failed state, Razorpay can charge the new card; successful recovery can move the subscription back toward an active state.\n\nRecoveryOS implication:\n- Early subscription failures can justify a retry-oriented recovery action.\n- Repeated failures should reduce the attractiveness of another retry.\n- Card-update/payment-update messaging is relevant when the customer needs to change the payment method.\n- The system should distinguish `pending` from `halted`.\n\nSource:\nhttps://razorpay.com/docs/payments/subscriptions/payment-retries/\n\n---"
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-09-04T16:41:52.258014+00:00",
+    "event": {
+      "customer_age": 25,
+      "customer_tenure_days": 300,
+      "previous_transactions": 20,
+      "previous_success_rate": 0.8,
+      "previous_failures": 3,
+      "amount": 500.0,
+      "event_type": "payment_failure",
+      "payment_method": "card",
+      "failure_reason": "authentication_failure",
+      "attempts": 4,
+      "hours_since_event": 2.0,
+      "checkout_intent": 0.8,
+      "engagement_score": 0.7,
+      "is_repeat_customer": 1
+    },
+    "ml_action": "payment_update",
+    "final_action": "payment_update",
+    "guardrail_reason": "Approved by guardrails",
+    "escalation_required": true,
+    "escalation_reason": "Repeated payment failures require manual review",
+    "decision": {
+      "action": "payment_update",
+      "explanation": "Payment update is recommended because the model predicts higher incremental recovery from correcting the payment method. The model estimates \u20b9108.95 incremental recovery over no action, with an estimated cost of \u20b91.00, giving \u20b9107.95 net value.",
+      "predicted_recovery": 261.26,
+      "baseline_recovery": 152.31,
+      "uplift": 108.95,
+      "cost": 1.0,
+      "net_value": 107.95,
+      "policy_context": [
+        "## 2. Subscription Payment Failures\n\nRazorpay Subscriptions can automatically retry failed recurring payments.\n\nDocumented failure scenarios include:\n- Expired card\n- Bank-blocked card\n- Insufficient customer account balance\n- Customer-cancelled mandate\n\nFor a failed subscription payment:\n1. The Subscription moves to `pending`.\n2. Razorpay notifies the merchant through relevant webhooks.\n3. For card-based subscriptions, Razorpay automatically retries the payment on the following day.\n4. In the documented T+3 retry model, retries occur on T+1, T+2 and T+3.\n5. If retries are exhausted, the Subscription moves to `halted`.\n\nWhen a customer changes the card while the subscription is in an applicable failed state, Razorpay can charge the new card; successful recovery can move the subscription back toward an active state.\n\nRecoveryOS implication:\n- Early subscription failures can justify a retry-oriented recovery action.\n- Repeated failures should reduce the attractiveness of another retry.\n- Card-update/payment-update messaging is relevant when the customer needs to change the payment method.\n- The system should distinguish `pending` from `halted`.\n\nSource:\nhttps://razorpay.com/docs/payments/subscriptions/payment-retries/\n\n---",
+        "## 6. RecoveryOS Decision Guidance\n\nThe following rules are RecoveryOS design rules derived from the above documentation, not official Razorpay policies:\n\n### Retry\nPrefer a retry-oriented action when:\n- The payment failure is recent.\n- Retry attempts have not been exhausted.\n- The failure is plausibly temporary.\n- The event is a subscription payment in an eligible retry state.\n\n### Payment Update\nPrefer a payment-update action when:\n- The customer likely needs to change card/payment details.\n- Repeated retry attempts have failed.\n- A subscription is in a state where customer payment-method correction is appropriate.\n\n### Reminder\nPrefer a reminder when:\n- Customer action is required.\n- A payment link or other payment-completion step needs attention.\n- The event is old enough that an immediate retry is less appropriate.\n\n### No Action\nUse no action when:\n- The expected incremental value of intervention is not positive after action cost.\n- The event is outside the useful recovery window.\n- Guardrails reject the available interventions.\n\n### Personalized Offer\nRecoveryOS treats personalized offers as an experimental business action. This is NOT an official Razorpay recovery recommendation. It should only be used when the ML model predicts sufficient incremental value and business guardrails permit it.\n\n---",
+        "## 1. Failed Payments and Webhooks\n\nWhen a payment attempt fails, Razorpay records the payment as Failed. If the `payment.failed` webhook is enabled, Razorpay sends a notification to the configured endpoint. Businesses can then analyse the failure and notify the customer.\n\nImportant implementation note:\n- Webhooks are asynchronous and near real-time.\n- Business-critical synchronous use cases may use payment APIs for polling.\n- A `payment.failed` webhook can sometimes be followed by a `payment.captured` webhook for the same transaction, including cases involving late authorisation or a customer retry.\n\nRecoveryOS implication:\n- A failed-payment event should not automatically be treated as permanently failed.\n- The decision engine should consider retry timing and subsequent payment-state events.\n\nSource:\nhttps://razorpay.com/docs/webhooks/\n\n---"
+      ]
+    }
+  },
+  {
+    "timestamp": "2026-09-04T16:48:26.745883+00:00",
+    "event": {
+      "customer_age": 25,
+      "customer_tenure_days": 300,
+      "previous_transactions": 20,
+      "previous_success_rate": 0.8,
+      "previous_failures": 3,
+      "amount": 500.0,
+      "event_type": "payment_failure",
+      "payment_method": "card",
+      "failure_reason": "authentication_failure",
+      "attempts": 4,
+      "hours_since_event": 2.0,
+      "checkout_intent": 0.8,
+      "engagement_score": 0.7,
+      "is_repeat_customer": 1
+    },
+    "ml_action": "payment_update",
+    "final_action": "payment_update",
+    "guardrail_reason": "Approved by guardrails",
+    "escalation_required": true,
+    "escalation_reason": "Repeated payment failures require manual review",
+    "decision": {
+      "action": "payment_update",
+      "explanation": "Payment update is recommended because the model predicts higher incremental recovery from correcting the payment method. The model estimates \u20b9108.95 incremental recovery over no action, with an estimated cost of \u20b91.00, giving \u20b9107.95 net value.",
+      "predicted_recovery": 261.26,
+      "baseline_recovery": 152.31,
+      "uplift": 108.95,
+      "cost": 1.0,
+      "net_value": 107.95,
+      "policy_context": [
+        "## 2. Subscription Payment Failures\n\nRazorpay Subscriptions can automatically retry failed recurring payments.\n\nDocumented failure scenarios include:\n- Expired card\n- Bank-blocked card\n- Insufficient customer account balance\n- Customer-cancelled mandate\n\nFor a failed subscription payment:\n1. The Subscription moves to `pending`.\n2. Razorpay notifies the merchant through relevant webhooks.\n3. For card-based subscriptions, Razorpay automatically retries the payment on the following day.\n4. In the documented T+3 retry model, retries occur on T+1, T+2 and T+3.\n5. If retries are exhausted, the Subscription moves to `halted`.\n\nWhen a customer changes the card while the subscription is in an applicable failed state, Razorpay can charge the new card; successful recovery can move the subscription back toward an active state.\n\nRecoveryOS implication:\n- Early subscription failures can justify a retry-oriented recovery action.\n- Repeated failures should reduce the attractiveness of another retry.\n- Card-update/payment-update messaging is relevant when the customer needs to change the payment method.\n- The system should distinguish `pending` from `halted`.\n\nSource:\nhttps://razorpay.com/docs/payments/subscriptions/payment-retries/\n\n---",
+        "## 6. RecoveryOS Decision Guidance\n\nThe following rules are RecoveryOS design rules derived from the above documentation, not official Razorpay policies:\n\n### Retry\nPrefer a retry-oriented action when:\n- The payment failure is recent.\n- Retry attempts have not been exhausted.\n- The failure is plausibly temporary.\n- The event is a subscription payment in an eligible retry state.\n\n### Payment Update\nPrefer a payment-update action when:\n- The customer likely needs to change card/payment details.\n- Repeated retry attempts have failed.\n- A subscription is in a state where customer payment-method correction is appropriate.\n\n### Reminder\nPrefer a reminder when:\n- Customer action is required.\n- A payment link or other payment-completion step needs attention.\n- The event is old enough that an immediate retry is less appropriate.\n\n### No Action\nUse no action when:\n- The expected incremental value of intervention is not positive after action cost.\n- The event is outside the useful recovery window.\n- Guardrails reject the available interventions.\n\n### Personalized Offer\nRecoveryOS treats personalized offers as an experimental business action. This is NOT an official Razorpay recovery recommendation. It should only be used when the ML model predicts sufficient incremental value and business guardrails permit it.\n\n---",
+        "## 1. Failed Payments and Webhooks\n\nWhen a payment attempt fails, Razorpay records the payment as Failed. If the `payment.failed` webhook is enabled, Razorpay sends a notification to the configured endpoint. Businesses can then analyse the failure and notify the customer.\n\nImportant implementation note:\n- Webhooks are asynchronous and near real-time.\n- Business-critical synchronous use cases may use payment APIs for polling.\n- A `payment.failed` webhook can sometimes be followed by a `payment.captured` webhook for the same transaction, including cases involving late authorisation or a customer retry.\n\nRecoveryOS implication:\n- A failed-payment event should not automatically be treated as permanently failed.\n- The decision engine should consider retry timing and subsequent payment-state events.\n\nSource:\nhttps://razorpay.com/docs/webhooks/\n\n---"
+      ]
+    }
   }
 ]

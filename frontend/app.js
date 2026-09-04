@@ -106,8 +106,11 @@ function displayResult(result) {
 
 
     document.getElementById("guardrailReason").textContent =
-        result.guardrail_reason;
-
+    result.escalation_required
+        ? "Review Required"
+        : result.ml_action !== result.recommended_action
+            ? "Action Adjusted"
+            : "Action Approved";
 
     document.getElementById("netValue").textContent =
         formatCurrency(decision.net_value);
